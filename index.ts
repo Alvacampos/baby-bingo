@@ -1,8 +1,9 @@
-const PDFDocument = require('pdfkit');
-const fs = require('fs-extra');
-const path = require('path');
+import PDFDocument from 'pdfkit';
+import fs from 'fs-extra';
+import path from 'path';
 
-function generateBingoCard(imageFiles) {
+
+function generateBingoCard(imageFiles: string[]): { imagePath: string | null; isFree: boolean }[] {
   const totalCells = 25;
   const card = [];
 
@@ -30,7 +31,7 @@ function generateBingoCard(imageFiles) {
   return card;
 }
 
-async function generateBingoPDF(cardCount = 1) {
+async function generateBingoPDF(cardCount: number = 1): Promise<void> {
   await fs.ensureDir('result');
 
   const imgDir = path.join(__dirname, 'img');
@@ -123,7 +124,7 @@ async function generateBingoPDF(cardCount = 1) {
     }
 
     doc.end();
-    await new Promise(resolve => stream.on('finish', resolve));
+    await new Promise<void>(resolve => stream.on('finish', () => resolve()));
   }
 }
 
